@@ -1,8 +1,11 @@
 package com.ysn.mapboxsample
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.Mapbox
@@ -57,6 +60,60 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         map_view.onSaveInstanceState(outState!!)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menu_item_change_style -> {
+                val items = arrayOf("Mapbox Street", "Outdoor", "Light", "Dark", "Satellite", "Satellite Street", "Traffic Day", "Traffic Night")
+                val alertDialogChangeStyleMaps = AlertDialog.Builder(this)
+                    .setItems(items) { dialog, item ->
+                        when (item) {
+                            0 -> {
+                                mapboxMap.setStyle(Style.MAPBOX_STREETS)
+                                dialog.dismiss()
+                            }
+                            1 -> {
+                                mapboxMap.setStyle(Style.OUTDOORS)
+                                dialog.dismiss()
+                            }
+                            2 -> {
+                                mapboxMap.setStyle(Style.LIGHT)
+                                dialog.dismiss()
+                            }
+                            3 -> {
+                                mapboxMap.setStyle(Style.DARK)
+                                dialog.dismiss()
+                            }
+                            4 -> {
+                                mapboxMap.setStyle(Style.SATELLITE)
+                                dialog.dismiss()
+                            }
+                            5 -> {
+                                mapboxMap.setStyle(Style.SATELLITE_STREETS)
+                                dialog.dismiss()
+                            }
+                            6 -> {
+                                mapboxMap.setStyle(Style.TRAFFIC_DAY)
+                                dialog.dismiss()
+                            }
+                            7 -> {
+                                mapboxMap.setStyle(Style.TRAFFIC_NIGHT)
+                                dialog.dismiss()
+                            }
+                        }
+                    }
+                    .setTitle(getString(R.string.change_style_maps))
+                    .create()
+                alertDialogChangeStyleMaps.show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initMapView(savedInstanceState: Bundle?) {
