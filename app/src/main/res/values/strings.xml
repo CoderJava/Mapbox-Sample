@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Mapbox Sample</string>
+    <string name="map_box_access_token">pk.eyJ1Ijoia29sb25lbCIsImEiOiJjanNjMWc2enEwMGs5M3lwbmF2NXEwazV4In0.70IXd_Hc-X_o1jQt19J3lA</string>
+    <string name="info">Info</string>
+    <string name="permissions_denied">Permissions denied</string>
+    <string name="dismiss">Dismiss</string>
 </resources>
