@@ -133,6 +133,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
             )
         }
+        this.mapboxMap.setOnMarkerClickListener {
+            for (marker in markers) {
+                if (marker.position == it.position) {
+                    markers.remove(marker)
+                    mapboxMap.removeMarker(marker)
+                    break
+                }
+            }
+            true
+        }
     }
 
     private fun initPermissions() {
