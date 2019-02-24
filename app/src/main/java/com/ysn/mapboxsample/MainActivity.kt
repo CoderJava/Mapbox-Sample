@@ -1,6 +1,6 @@
 package com.ysn.mapboxsample
 
-import android.content.DialogInterface
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -11,6 +11,8 @@ import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.annotations.Marker
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.mapbox.mapboxsdk.location.modes.CameraMode
+import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
@@ -73,7 +75,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.menu_item_change_style -> {
-                val items = arrayOf("Mapbox Street", "Outdoor", "Light", "Dark", "Satellite", "Satellite Street", "Traffic Day", "Traffic Night")
+                val items = arrayOf(
+                    "Mapbox Street",
+                    "Outdoor",
+                    "Light",
+                    "Dark",
+                    "Satellite",
+                    "Satellite Street",
+                    "Traffic Day",
+                    "Traffic Night"
+                )
                 val alertDialogChangeStyleMaps = AlertDialog.Builder(this)
                     .setItems(items) { dialog, item ->
                         when (item) {
@@ -125,7 +136,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(mapboxMap: MapboxMap) {
         this.mapboxMap = mapboxMap
-        this.mapboxMap.setStyle(Style.MAPBOX_STREETS)
+        this.mapboxMap.setStyle(Style.MAPBOX_STREETS) {
+            showingDeviceLocation(mapboxMap)
+        }
         this.mapboxMap.addOnMapClickListener {
             markers.add(
                 mapboxMap.addMarker(
@@ -143,6 +156,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             true
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun showingDeviceLocation(mapboxMap: MapboxMap) {
+        val locationComponent = mapboxMap.locationComponent
+        locationComponent.activateLocationComponent(this, mapboxMap.style!!)
+        locationComponent.isLocationComponentEnabled = true
+        locationComponent.cameraMode = CameraMode.TRACKING
+        locationComponent.renderMode = RenderMode.COMPASS
     }
 
     private fun initPermissions() {
