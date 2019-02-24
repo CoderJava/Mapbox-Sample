@@ -9,6 +9,8 @@ import android.view.MenuItem
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.annotations.Marker
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
@@ -16,8 +18,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    lateinit var permissionsManager: PermissionsManager
-    lateinit var mapboxMap: MapboxMap
+    private lateinit var permissionsManager: PermissionsManager
+    private lateinit var mapboxMap: MapboxMap
+    private val markers = ArrayList<Marker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +126,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(mapboxMap: MapboxMap) {
         this.mapboxMap = mapboxMap
         this.mapboxMap.setStyle(Style.MAPBOX_STREETS)
+        this.mapboxMap.addOnMapClickListener {
+            markers.add(
+                mapboxMap.addMarker(
+                    MarkerOptions().position(it)
+                )
+            )
+        }
     }
 
     private fun initPermissions() {
